@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.liu008.myapplication.MainActivity">
+    <item
+        android:id="@+id/item_pintao"
+        android:title="频道"
+        android:icon="@mipmap/ic_discovery_gray"/>
+    <item
+        android:id="@+id/item_friends"
+        android:title="好友"
+        android:icon="@mipmap/ic_news_gray"/>
+    <item
+        android:id="@+id/item_me"
+        android:title="我的"
+        android:icon="@mipmap/ic_more_gray"/>
+</menu>

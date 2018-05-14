@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+     默认时的背景图片
+    <item android:drawable="@drawable/weixin_normal" />
+    选中时的图片背景
+    <item android:drawable="@drawable/weixin_pressed" android:state_selected="true"/>
+    -->
+    <item android:color="@color/tab_checked" android:state_checked="true" />
+    <item android:color="@color/tab_unchecked" android:state_checked="false" />
+</selector>

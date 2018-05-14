@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/login_input_phone_et"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="请输入手机号"
+        android:inputType="phone" />
+    <EditText
+        android:id="@+id/login_register_password"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_input_phone_et"
+        android:layout_alignLeft="@+id/login_input_phone_et"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+
+        android:hint="密码"/>
+    <requestFocus />
+
+
+    <EditText
+        android:id="@+id/login_input_code_et"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/login_register_password"
+        android:layout_below="@+id/login_register_password"
+        android:layout_marginTop="20dp"
+        android:hint="请输入验证码"
+        android:inputType="number" >
+    </EditText>
+
+    <Button
+        android:id="@+id/login_request_code_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/login_register_password"
+        android:layout_alignTop="@+id/login_input_code_et"
+        android:text="获取验证码" />
+
+    <Button
+        android:id="@+id/login_commit_btn"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/login_input_code_et"
+        android:layout_below="@+id/login_input_code_et"
+        android:layout_marginTop="44dp"
+        android:text="注册" />
+
+</RelativeLayout>
