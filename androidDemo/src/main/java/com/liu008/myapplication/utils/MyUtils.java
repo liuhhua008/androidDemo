@@ -56,9 +56,9 @@ public class MyUtils {
     }
 
     /**
-     * post请求后台
+     * post请求后台注册和用户登录
      */
-    public static void postRequest(Object requestBody, final Handler mHandler)  {
+    public static void postRequest(Object requestBody, final Handler mHandler,String url)  {
         //创建一个OkHttpClient对象
         final OkHttpClient okHttpClient= new OkHttpClient();
         //把传入的对象转成JSON字串
@@ -67,7 +67,7 @@ public class MyUtils {
         RequestBody formBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
         //发起请求
         final Request request = new Request.Builder()
-                .url("http://192.168.99.102:8080/oauth/register")
+                .url(url)
                 .post(formBody)
                 .build();
         //新建一个线程，用于得到服务器响应的参数
@@ -92,4 +92,8 @@ public class MyUtils {
         }).start();
 
     }
+
+
+
+
 }

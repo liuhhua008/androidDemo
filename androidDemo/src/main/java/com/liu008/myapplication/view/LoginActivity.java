@@ -1,6 +1,9 @@
 package com.liu008.myapplication.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,9 +11,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.liu008.myapplication.MainActivity;
 import com.liu008.myapplication.R;
+import com.liu008.myapplication.model.AccessToken;
+import com.liu008.myapplication.model.UserInfo;
 import com.liu008.myapplication.model.UserManage;
+import com.liu008.myapplication.utils.MyConstant;
+import com.liu008.myapplication.utils.MyUtils;
+import com.liu008.myapplication.utils.ResultMsg;
+import com.liu008.myapplication.utils.ResultStatusCode;
 
 /**
  * 登录页面
@@ -26,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
      */
     private EditText edt_password;
     private TextView tv_register;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +49,12 @@ public class LoginActivity extends AppCompatActivity {
     private void initViews() {
         edt_username = (EditText) findViewById(R.id.edt_username);
         edt_password = (EditText) findViewById(R.id.edt_password);
-        tv_register= (TextView) findViewById(R.id.tv_register);
+        tv_register = (TextView) findViewById(R.id.tv_register);
         tv_register.setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_login).setOnClickListener(mOnClickListener);
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-
-
         @Override
         public void onClick(View view) {
 
@@ -51,20 +62,57 @@ public class LoginActivity extends AppCompatActivity {
                 case R.id.btn_login://登录
                     String userName = edt_username.getText().toString();
                     String userPwd = edt_password.getText().toString();
-                    //这里还没有判断就直接给保存并跳转主页了。
-                    //向服务器发送验证
-                    //根据返回码判断是否成功，如果成功执行下面带码，不成功就要带显示Toast一下
-                    UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
+
+                    if ("".equals(userName) || "".equals(userPwd)) {
+                        Toast.makeText(LoginActivity.this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
+                        break;
+                    }else{
+                        login();
+                        break;
+                    }
+
+                case R.id.tv_register://注册
+                    Intent intent1 = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent1);
+                    break;
+            }
+
+        }
+    };
+
+    private void login() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserName(edt_username.getText().toString());
+        String passWord = edt_password.getText().toString();
+        passWord = MyUtils.getMD5(passWord + "LaoSiJi");
+        userInfo.setPassWord(passWord);
+        userInfo.setClientId(MyConstant.AUDIENCE_CLIENTID);
+        MyUtils.postRequest(userInfo, mHandler, MyConstant.APPSERVER_URL+"oauth/token");
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                ResultMsg resultMsg = JSON.parseObject(msg.obj.toString(), ResultMsg.class);
+                //登录成功
+                if (resultMsg.getErrcode() == ResultStatusCode.OK.getErrcode()) {
+                    AccessToken accessToken = JSON.parseObject(resultMsg.getP2pdata().toString(),AccessToken.class);
+//                   JSONObject json= (JSONObject) resultMsg.getP2pdata();
+//                   // jsonObject=jsonObject.getJSONObject("p2pdata");
+//                    AccessToken accessToken = JSONObject.toJavaObject(json,AccessToken.class);
+                    //把token信息保存到本地
+                    UserManage.getInstance().saveUserInfo(LoginActivity.this, accessToken);
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);//跳转到主页
                     startActivity(intent);
                     finish();
-                    break;
-                case R.id.tv_register://注册
-                    Intent intent1=new Intent(LoginActivity.this,RegisterActivity.class);
-                    startActivity(intent1);
+                } else if (resultMsg.getErrcode() == ResultStatusCode.INVALID_PASSWORD.getErrcode()) {
+                    Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                }
             }
-
         }
     };
 }

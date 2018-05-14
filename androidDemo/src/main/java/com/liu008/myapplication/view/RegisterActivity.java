@@ -148,7 +148,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(intent);
-                    return;
+                    finish();
                 }else if (resultMsg.getErrcode()== ResultStatusCode.USERALREADY_REGISTERED.getErrcode()){
                     //该手机号码已经注册过了
                     Toast.makeText(getApplicationContext(), "该号码已被注册！",
@@ -189,7 +189,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         passWord= MyUtils.getMD5(passWord+"LaoSiJi");
         userInfo.setPassWord(passWord);
         userInfo.setClientId(MyConstant.AUDIENCE_CLIENTID);
-        MyUtils.postRequest(userInfo,mHandler);
+        MyUtils.postRequest(userInfo,mHandler,MyConstant.APPSERVER_URL+"oauth/register");
     }
 
     /**

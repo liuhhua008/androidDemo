@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
         //mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
         //mHandler.sendEmptyMessageDelayed(GO_REGISTER, 2000);
 
-        if (UserManage.getInstance().hasUserInfo(this))//自动登录判断，SharePrefences中有数据，则跳转到主页，没数据则跳转到登录页
+        if (UserManage.getInstance().getUserfo(this))//自动登录判断，SharePrefences中有数据，则跳转到主页，没数据则跳转到登录页
         {
             mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
         } else {
