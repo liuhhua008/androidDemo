@@ -11,6 +11,7 @@ public enum ResultStatusCode {
     INVALID_CLIENTID(50001,"invalid_clientid"),
     INVALID_PASSWORD(50002,"invalid_password"),
     INVALID_TOKEN(60001,"invalid_token"),
+    EXPIRES_TOKEN(60002,"expires_token"),
     USERALREADY_REGISTERED(70001,"Already registered");
 
     private int errcode;

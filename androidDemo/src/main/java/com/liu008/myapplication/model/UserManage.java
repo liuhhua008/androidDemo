@@ -9,7 +9,7 @@ import android.text.TextUtils;
  * Created by libin
  */
 
-public class UserManage {
+public class UserManage  {
     private static UserManage instance;
     private UserManage(){}
 
@@ -27,6 +27,7 @@ public class UserManage {
         SharedPreferences sp=context.getSharedPreferences("userInfo",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sp.edit();
         editor.putString("access_token",accessToken.getAccess_token());
+        editor.putString("refresh_type",accessToken.getRefresh_token());
         editor.putString("token_type",accessToken.getToken_type());
         editor.putLong("expires_in",accessToken.getExpires_in());
         editor.commit();
