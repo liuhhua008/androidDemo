@@ -10,5 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
+    <TextView
+        android:id="@+id/textViewApi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView"
+        android:text="点我访问api-url试试"
+        android:layout_centerHorizontal="true"
+       />
 
 </RelativeLayout>

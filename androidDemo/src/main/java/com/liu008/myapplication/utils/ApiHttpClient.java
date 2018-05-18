@@ -1,5 +1,7 @@
 package com.liu008.myapplication.utils;
 
+import android.content.Context;
+
 import com.liu008.myapplication.interceptor.TokenInterceptor;
 
 import okhttp3.OkHttpClient;
@@ -9,11 +11,12 @@ import okhttp3.OkHttpClient;
  * Created by 008 on 2018/5/15.
  */
 
-public class ApiHttpClient  {
+public class ApiHttpClient extends OkHttpClient {
 
-    public static OkHttpClient getInstance(){
-       OkHttpClient client =new OkHttpClient();
-        client.networkInterceptors().add(new TokenInterceptor());
-        return client;
+
+    public static OkHttpClient getInstance(Context context){
+      // return new ApiHttpClient(context).newBuilder().addNetworkInterceptor(new TokenInterceptor(context)).build();
+       return  new OkHttpClient.Builder().addInterceptor(new TokenInterceptor(context))
+               .build();
     }
 }

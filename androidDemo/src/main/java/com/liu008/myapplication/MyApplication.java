@@ -12,17 +12,27 @@ import org.xutils.x;
  */
 
 public class MyApplication extends Application {
-    private static Context mContext;
+    public static String getAccess_jwt() {
+        return access_jwt;
+    }
+
+    public static void setAccess_jwt(String access_jwt) {
+        MyApplication.access_jwt = access_jwt;
+    }
+
+    private static String access_jwt;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext=getApplicationContext();
+
         x.Ext.init(this); //初始化xUtils
         MobSDK.init(this);//初始化短信平台
+        access_jwt=getApplicationContext().getSharedPreferences("userInfo",Context.MODE_PRIVATE).getString("access_token",null);
     }
 
-    public static  Context getmContext() {
-        return mContext;
-    }
+
+
+
 }

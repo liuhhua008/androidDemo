@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.liu008.myapplication.MyApplication;
+
 /**
  * 保存用户信息的管理类
  * Created by libin
@@ -20,12 +22,14 @@ public class UserManage  {
         return instance;
     }
     /**
-     * 保存自动登录的用户信息,不安全的做法有待改进token机制
+     * 保存自动登录的用户信息,主要是token信息。
      */
     public void saveUserInfo(Context context, AccessToken accessToken){
         //Context.MODE_PRIVATE表示SharePrefences的数据只有自己应用程序能访问。
         SharedPreferences sp=context.getSharedPreferences("userInfo",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sp.edit();
+        //更新JWT全局变量
+        MyApplication.setAccess_jwt(accessToken.getAccess_token());
         editor.putString("access_token",accessToken.getAccess_token());
         editor.putString("refresh_type",accessToken.getRefresh_token());
         editor.putString("token_type",accessToken.getToken_type());
