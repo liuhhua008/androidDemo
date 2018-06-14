@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.mob.MobSDK;
+import com.zhy.autolayout.config.AutoLayoutConifg;
 
 import org.xutils.x;
 
@@ -26,7 +27,8 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        //屏幕适配
+        AutoLayoutConifg.getInstance().useDeviceSize();
         x.Ext.init(this); //初始化xUtils
         MobSDK.init(this);//初始化短信平台
         access_jwt=getApplicationContext().getSharedPreferences("userInfo",Context.MODE_PRIVATE).getString("access_token",null);

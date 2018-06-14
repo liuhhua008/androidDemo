@@ -6,6 +6,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -60,11 +62,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void init() {
-        inputPhoneEt = (EditText) findViewById(R.id.login_input_phone_et);
-        inputPasswordEt = (EditText) findViewById(R.id.login_register_password);
-        inputCodeEt = (EditText) findViewById(R.id.login_input_code_et);
-        requestCodeBtn = (Button) findViewById(R.id.login_request_code_btn);
-        commitBtn = (Button) findViewById(R.id.login_commit_btn);
+        inputPhoneEt = (EditText) findViewById(R.id.etPhone);
+        inputPasswordEt = (EditText) findViewById(R.id.etPwd);
+        inputCodeEt = (EditText) findViewById(R.id.etVerifyCode);
+        requestCodeBtn = (Button) findViewById(R.id.btnSendCode);
+        commitBtn = (Button) findViewById(R.id.btnRegister);
         requestCodeBtn.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
         // 启动短信验证sdk
@@ -89,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String phoneNums = inputPhoneEt.getText().toString();
         switch (v.getId()) {
             //按下获取验证码
-            case R.id.login_request_code_btn:
+            case R.id.btnSendCode:
                 // 1. 通过规则判断手机号
                 if (!judgePhoneNums(phoneNums)) {
                     return;
@@ -118,12 +120,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }).start();
                 break;
             //按下注册按按钮
-            case R.id.login_commit_btn:
+            case R.id.btnRegister:
                 //将收到的验证码和手机号提交再次核对,就是将手机号和验证码发给短信平台进行验证，
                 // 验证结果会触发消息事件，反应到handler不带what标记的事件，并且还带了一个消息对象。
                 SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt
                         .getText().toString());
                 //createProgressBar();
+                break;
+            case R.id.ivSeePwd:
+                if (inputPasswordEt.getTransformationMethod() == HideReturnsTransformationMethod.getInstance()) {
+                    inputPasswordEt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                } else {
+                    inputPasswordEt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+
+                inputPasswordEt.setSelection(inputPasswordEt.getText().toString().trim().length());
                 break;
         }
     }

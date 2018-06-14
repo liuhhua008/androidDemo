@@ -22,7 +22,7 @@ import com.liu008.myapplication.utils.MyConstant;
 import com.liu008.myapplication.utils.MyUtils;
 import com.liu008.myapplication.utils.ResultMsg;
 import com.liu008.myapplication.utils.ResultStatusCode;
-
+import com.zhy.autolayout.*;
 /**
  * 登录页面
  */
@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
      * 密码
      */
     private EditText edt_password;
-    private TextView tv_register;
+    private TextView btn_login;
 
 
     @Override
@@ -47,11 +47,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        edt_username = (EditText) findViewById(R.id.edt_username);
-        edt_password = (EditText) findViewById(R.id.edt_password);
-        tv_register = (TextView) findViewById(R.id.tv_register);
-        tv_register.setOnClickListener(mOnClickListener);
-        findViewById(R.id.btn_login).setOnClickListener(mOnClickListener);
+        edt_username = (EditText) findViewById(R.id.login_input_name);
+        edt_password = (EditText) findViewById(R.id.login_input_password);
+        btn_login = (TextView) findViewById(R.id.login_btn);
+        btn_login.setOnClickListener(mOnClickListener);
+        findViewById(R.id.tv_ToRegister).setOnClickListener(mOnClickListener);
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View view) {
 
             switch (view.getId()) {
-                case R.id.btn_login://登录
+                case R.id.login_btn://登录
                     String userName = edt_username.getText().toString();
                     String userPwd = edt_password.getText().toString();
 
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                         break;
                     }
 
-                case R.id.tv_register://注册
+                case R.id.tv_ToRegister://注册
                     Intent intent1 = new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(intent1);
                     break;

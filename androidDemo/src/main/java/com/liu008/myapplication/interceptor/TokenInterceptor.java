@@ -61,7 +61,17 @@ public class TokenInterceptor implements Interceptor {
         request=request.newBuilder().header("Authorization", "bearer " +MyApplication.getAccess_jwt()).build();
         Response response = chain.proceed(request);
         //Log.d(TAG, "response.code=" + response.body().string());
-        //JWT如果过期,发请求刷新token请求并接收响应结果----------------------------------------------------------------------
+        //1.首选判断是否已经被下线
+        if (isUserCodeError(response)){
+            Log.d(TAG, "您已经下线，请重新登录");
+            //跳转到登录页
+            context.startActivity(new Intent(context,LoginActivity.class));
+            Looper.prepare();
+            Toast.makeText(context, "您已经下线，请重新登录。", Toast.LENGTH_LONG).show();
+            Looper.loop();// 进入loop中的循环，查看消息队
+            return response;
+        }
+        //2.JWT如果过期,发请求刷新token请求并接收响应结果----------------------------------------------------------------------
         if (isTokenExpired(response)) {
             Log.d(TAG, "自动刷新Token,然后重新请求数据");
             String refreshJwt = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("refresh_type", null);
@@ -131,5 +141,14 @@ public class TokenInterceptor implements Interceptor {
             }
             return false;
         }
+
+        private boolean isUserCodeError(Response response){
+            String auth=response.header("Authorization");
+            if ("userCodeError".equals(auth)) {
+                return true;
+            }
+            return false;
+        }
+
 
 }
