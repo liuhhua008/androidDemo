@@ -3,6 +3,7 @@ package com.liu008.myapplication;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.PersistableBundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -14,6 +15,9 @@ import android.view.MenuItem;
 
 import com.liu008.myapplication.adapter.ViewPagerAdapter;
 import com.liu008.myapplication.view.BaseActivity;
+import com.liu008.myapplication.view.MeFragment;
+
+import java.lang.reflect.Field;
 
 public class MainActivity extends BaseActivity {
     private ViewPager viewPager;
@@ -90,17 +94,21 @@ public class MainActivity extends BaseActivity {
         ViewPagerAdapter adapter=new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(BaseFragment.newInstance("这是频道页"));
         adapter.addFragment(BaseFragment.newInstance("这是好友页"));
-        adapter.addFragment(BaseFragment.newInstance("个人中心"));
+        adapter.addFragment(new MeFragment());
         viewPager.setAdapter(adapter);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void initView() {
-        //setColor(MainActivity.this, Color.BLACK); // 改变状态栏的颜色
-        //setTranslucent(MainActivity.this); // 改变状态栏变成透明
        viewPager=(ViewPager) findViewById(R.id.viewPager);
        bottomNavigationView=(BottomNavigationView)findViewById(R.id.bottom_navigation);
         //默认 >3 的选中效果会影响ViewPager的滑动切换时的效果，故利用反射去掉
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+    }
+
+    @Override
+    public void finish() {
+        System.out.println("man_finish被执行了！");
+        super.finish();
     }
 }

@@ -19,14 +19,15 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/folat_framelayout"
          />
+
     <FrameLayout
         android:id="@+id/folat_framelayout"
-        android:tag="folat_tag_frameLayout"
-        android:layout_above="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:background="@color/smssdk_gray"></FrameLayout>
+        android:layout_above="@+id/bottom_navigation"
+        android:background="@color/smssdk_gray"
+        android:tag="folat_tag_frameLayout"
+        android:visibility="gone"></FrameLayout>
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

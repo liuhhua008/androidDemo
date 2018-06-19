@@ -6,8 +6,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private EditText edt_password;
     private TextView btn_login;
-
+    private ImageView iv_seePW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
         edt_username = (EditText) findViewById(R.id.login_input_name);
         edt_password = (EditText) findViewById(R.id.login_input_password);
         btn_login = (TextView) findViewById(R.id.login_btn);
+        iv_seePW= (ImageView) findViewById(R.id.ivSeePwd_login);
         btn_login.setOnClickListener(mOnClickListener);
+        iv_seePW.setOnClickListener(mOnClickListener);
         findViewById(R.id.tv_ToRegister).setOnClickListener(mOnClickListener);
     }
 
@@ -75,6 +81,16 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent1 = new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(intent1);
                     break;
+                case R.id.ivSeePwd_login://密码可见和隐藏
+                    if (edt_password.getTransformationMethod() == HideReturnsTransformationMethod.getInstance()) {
+                        edt_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    } else {
+                        edt_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }
+                    edt_password.setSelection(edt_password.getText().toString().trim().length());
+                    break;
+
+
             }
 
         }

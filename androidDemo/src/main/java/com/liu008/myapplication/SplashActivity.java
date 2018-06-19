@@ -6,6 +6,8 @@ import android.os.Message;
 import android.os.UserManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.liu008.myapplication.model.UserManage;
 import com.liu008.myapplication.view.LoginActivity;
@@ -48,7 +50,11 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);  //无title
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);  //全屏
         setContentView(R.layout.activity_splash);
+        //setContentView(R.layout.activity_splash);
         //mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
         //mHandler.sendEmptyMessageDelayed(GO_REGISTER, 2000);
 

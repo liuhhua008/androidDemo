@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffF6F2ED" >
 
     <include layout="@layout/include_toolbar"/>
 
-        <com.zhy.autolayout.AutoRelativeLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
@@ -22,7 +22,7 @@
                 android:padding="3dp"
                  />
 
-            <com.zhy.autolayout.AutoLinearLayout
+            <LinearLayout
                 android:id="@+id/login_edit_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 android:background="@drawable/login_layout_editor_bg"
                 android:orientation="vertical" >
 
-                <com.zhy.autolayout.AutoLinearLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="47dp"
                     android:focusable="true"
@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="@string/user_name"
+                        android:text="手机号："
                         android:textColor="@android:color/black"
                         android:textSize="17sp" />
 
@@ -55,47 +55,59 @@
                         android:layout_marginRight="5dp"
                         android:background="#fffbfbfb"
                         android:textSize="14sp"
-                        android:hint="你的手机号码"
+                        android:hint="用户名为你的手机号码"
                         android:singleLine="true" />
-                </com.zhy.autolayout.AutoLinearLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#ffc8c8c8" />
 
+
                 <com.zhy.autolayout.AutoLinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="47dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal">
+                    <com.zhy.autolayout.AutoRelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/tv_register_pw"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="10dp"
+                            android:text="密 码："
+                            android:textColor="@android:color/black"
+                            android:layout_centerVertical="true"
+                            android:textSize="17sp" />
+                        <EditText
+                            android:id="@+id/login_input_password"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/tv_register_pw"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:textSize="14sp"
+                            android:background="#fffbfbfb"
+                            android:inputType="textPassword"
+                            android:hint="输入您的密码"/>
+                        <requestFocus />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/user_password"
-                        android:textColor="@android:color/black"
-                        android:textSize="17sp" />
+                        <ImageView
+                            android:id="@+id/ivSeePwd_login"
+                            android:layout_width="60px"
+                            android:layout_height="60px"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5px"
+                            android:src="@mipmap/ic_see_pwd"/>
 
-                    <EditText
-                        android:id="@+id/login_input_password"
-                        android:layout_width="192dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#fffbfbfb"
-                        android:inputType="textPassword"
-                        android:singleLine="true" />
+                    </com.zhy.autolayout.AutoRelativeLayout>
 
-                    <CheckBox
-                        android:id="@+id/login_switchBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:button="@drawable/login_hide_password_selector"
-                        android:clickable="true" />
                 </com.zhy.autolayout.AutoLinearLayout>
-            </com.zhy.autolayout.AutoLinearLayout>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/login_btn"
@@ -108,9 +120,9 @@
                 android:background="@drawable/login_layout_btn_bg"
                 android:text="@string/loginBt"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
-            <com.zhy.autolayout.AutoRelativeLayout
+            <RelativeLayout
                 android:id="@+id/login_passfind_and_phonelogin"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
@@ -136,9 +148,9 @@
                     android:text="@string/phone_register"
                     android:textColor="#ff288dfe"
                     android:textSize="15sp" />
-            </com.zhy.autolayout.AutoRelativeLayout>
+            </RelativeLayout>
 
-            <com.zhy.autolayout.AutoLinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_passfind_and_phonelogin"
@@ -163,7 +175,7 @@
                     android:textColor="#ff787878"
                     android:textSize="15sp" />
 
-            </com.zhy.autolayout.AutoLinearLayout>
-        </com.zhy.autolayout.AutoRelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
 
-</com.zhy.autolayout.AutoRelativeLayout>
+</RelativeLayout>

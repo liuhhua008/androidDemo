@@ -36,7 +36,9 @@
         </meta-data>
 
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".SplashActivity"
@@ -48,6 +50,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.LoginActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             />
 

@@ -12,8 +12,10 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     // 验证码输入框
     private EditText inputCodeEt;
+    private ImageView ivSeePW;
 
     // 获取验证码按钮
     private Button requestCodeBtn;
@@ -67,6 +70,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         inputCodeEt = (EditText) findViewById(R.id.etVerifyCode);
         requestCodeBtn = (Button) findViewById(R.id.btnSendCode);
         commitBtn = (Button) findViewById(R.id.btnRegister);
+        ivSeePW = (ImageView) findViewById(R.id.ivSeePwd);
+        ivSeePW.setOnClickListener(this);
         requestCodeBtn.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
         // 启动短信验证sdk
@@ -133,7 +138,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 } else {
                     inputPasswordEt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }
-
                 inputPasswordEt.setSelection(inputPasswordEt.getText().toString().trim().length());
                 break;
         }

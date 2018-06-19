@@ -3,8 +3,11 @@ package com.liu008.myapplication.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.liu008.myapplication.MyApplication;
+
+import java.io.File;
 
 /**
  * 保存用户信息的管理类
@@ -12,6 +15,7 @@ import com.liu008.myapplication.MyApplication;
  */
 
 public class UserManage  {
+    SharedPreferences.Editor editor;
     private static UserManage instance;
     private UserManage(){}
 
@@ -27,7 +31,8 @@ public class UserManage  {
     public void saveUserInfo(Context context, AccessToken accessToken){
         //Context.MODE_PRIVATE表示SharePrefences的数据只有自己应用程序能访问。
         SharedPreferences sp=context.getSharedPreferences("userInfo",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sp.edit();
+
+        editor=sp.edit();
         //更新JWT全局变量
         MyApplication.setAccess_jwt(accessToken.getAccess_token());
         editor.putString("access_token",accessToken.getAccess_token());
@@ -37,6 +42,31 @@ public class UserManage  {
         editor.commit();
     }
 
+    /**
+     * 删除用户登录信息
+     * @param context
+     */
+    public void deleteUserInfo(Context context){
+        int version = android.os.Build.VERSION.SDK_INT;
+        if (version >=24) {
+            context.deleteSharedPreferences("userInfo");
+            //不搞下面这个，在程序没有完全退出死透的情况下删除了也会重生。
+            editor.clear();
+            editor.commit();
+            Toast.makeText(context, "帐号已退出", Toast.LENGTH_LONG).show();
+        }else{
+            File file= new File("/data/data/"+context.getPackageName().toString()+"/shared_prefs","userInfo.xml");
+            if(file.exists())
+            {
+                file.delete();
+                editor.clear();
+                editor.commit();
+                Toast.makeText(context, "帐号已退出", Toast.LENGTH_LONG).show();
+            }
+        }
+        //更新JWT全局变量
+        MyApplication.setAccess_jwt("");
+    }
     /**
      * 获取用户信息model
      *

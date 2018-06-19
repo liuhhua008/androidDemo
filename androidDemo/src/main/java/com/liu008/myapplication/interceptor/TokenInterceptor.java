@@ -60,12 +60,21 @@ public class TokenInterceptor implements Interceptor {
         String jwt =MyApplication.getAccess_jwt();
         request=request.newBuilder().header("Authorization", "bearer " +MyApplication.getAccess_jwt()).build();
         Response response = chain.proceed(request);
+        if (response.code()== 401){
+            context.startActivity(new Intent(context,LoginActivity.class));
+            UserManage.getInstance().deleteUserInfo(context);
+            Looper.prepare();
+            Toast.makeText(context, "验证信息出错，请重新登录。", Toast.LENGTH_LONG).show();
+            Looper.loop();// 进入loop中的循环，查看消息队
+            return response;
+        }
         //Log.d(TAG, "response.code=" + response.body().string());
         //1.首选判断是否已经被下线
         if (isUserCodeError(response)){
             Log.d(TAG, "您已经下线，请重新登录");
             //跳转到登录页
             context.startActivity(new Intent(context,LoginActivity.class));
+            UserManage.getInstance().deleteUserInfo(context);
             Looper.prepare();
             Toast.makeText(context, "您已经下线，请重新登录。", Toast.LENGTH_LONG).show();
             Looper.loop();// 进入loop中的循环，查看消息队
@@ -91,6 +100,7 @@ public class TokenInterceptor implements Interceptor {
                 Log.d(TAG, "你已经很久没有登录了，refresh-jwt都过期了");
                 //跳转到登录页
                 context.startActivity(new Intent(context,LoginActivity.class));
+                UserManage.getInstance().deleteUserInfo(context);
                 Looper.prepare();
                 Toast.makeText(context, "长时间未登录，请重新登录。", Toast.LENGTH_LONG).show();
                 Looper.loop();// 进入loop中的循环，查看消息队
@@ -111,6 +121,7 @@ public class TokenInterceptor implements Interceptor {
             //其它原因的话直接返回结果,其实这里要再处理一下才好.
             //跳转到登录页
             context.startActivity(new Intent(context,LoginActivity.class));
+            UserManage.getInstance().deleteUserInfo(context);
             Looper.prepare();
             Toast.makeText(context, "验证信息出错，请重新登录。", Toast.LENGTH_LONG).show();
             Looper.loop();// 进入loop中的循环，查看消息队
