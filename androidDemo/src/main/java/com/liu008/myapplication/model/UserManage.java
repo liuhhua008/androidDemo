@@ -9,6 +9,9 @@ import com.liu008.myapplication.MyApplication;
 
 import java.io.File;
 
+import io.rong.imkit.utils.StringUtils;
+
+
 /**
  * 保存用户信息的管理类
  * Created by libin
@@ -35,6 +38,7 @@ public class UserManage  {
         editor=sp.edit();
         //更新JWT全局变量
         MyApplication.setAccess_jwt(accessToken.getAccess_token());
+        editor.putString("user_id",accessToken.getUser_id());
         editor.putString("access_token",accessToken.getAccess_token());
         editor.putString("refresh_type",accessToken.getRefresh_token());
         editor.putString("token_type",accessToken.getToken_type());
@@ -80,13 +84,20 @@ public class UserManage  {
 //        userInfo.setUserName(sp.getString("USER_NAME",""));
 //        userInfo.setPassWord(sp.getString("PASSWORD",""));
         String token=sp.getString("access_token",null);
-        if (token==null){
+        if (token==null||"".equals(token)){
             //如果没有本地token返回false，跳转登录页
             return false;
         }else{
             return true; //准备去主页
         }
 
+    }
+
+
+    public String getUserId(Context context){
+        SharedPreferences sp=context.getSharedPreferences("userInfo",Context.MODE_PRIVATE);
+        String userID=sp.getString("user_id",null);
+        return userID;
     }
     /**
      * userInfo中是否有数据

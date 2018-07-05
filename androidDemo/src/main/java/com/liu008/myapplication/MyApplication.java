@@ -12,6 +12,8 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 
+import io.rong.imkit.RongIM;
+
 /**
  * Created by 008 on 2018/3/23.
  */
@@ -40,6 +42,8 @@ public class MyApplication extends Application {
         instance = this;
         //屏幕适配
         AutoLayoutConifg.getInstance().useDeviceSize();
+        //初始化融云SDK
+        RongIM.init(this);
         x.Ext.init(this); //初始化xUtils
         MobSDK.init(this);//初始化短信平台
         //从文件中读取JWT值到内存

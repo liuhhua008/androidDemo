@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
     <include
+        android:id="@+id/al_mantivity"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         layout="@layout/include_toolbar"/>
@@ -17,6 +18,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/al_mantivity"
         android:layout_above="@+id/folat_framelayout"
          />
 

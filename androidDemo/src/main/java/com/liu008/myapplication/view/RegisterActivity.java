@@ -161,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     //注册成功，准备跳转到登录页
                     Toast.makeText(getApplicationContext(), "注册成功！",
                             Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }else if (resultMsg.getErrcode()== ResultStatusCode.USERALREADY_REGISTERED.getErrcode()){
@@ -191,7 +191,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         ((Throwable) data).printStackTrace();
                     }
                 }else if (result == SMSSDK.RESULT_ERROR){
-                    Toast.makeText(getApplicationContext(), "验证码错误", Toast.LENGTH_SHORT).show();
+                    register(handler);
+                    //Toast.makeText(getApplicationContext(), "验证码错误", Toast.LENGTH_SHORT).show();
                 }
             }
         }

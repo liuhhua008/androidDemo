@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.liu008.myapplication.model.UserManage;
+import com.liu008.myapplication.utils.MyConstant;
 import com.liu008.myapplication.view.LoginActivity;
 import com.liu008.myapplication.view.RegisterActivity;
 
@@ -21,6 +22,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final int GO_HOME=0;//去主页
     private static final int GO_LOGIN = 1;//去登录页
     private static final int GO_REGISTER = 2;//去注册页
+    private static final int GO_HOME2 = 3;//去主页，同时带点参数过去
     /**
      * 跳转判断
      */
@@ -32,6 +34,12 @@ public class SplashActivity extends AppCompatActivity {
                 case GO_HOME://去主页
                     Intent intent=new Intent(SplashActivity.this,MainActivity.class);
                     startActivity(intent);
+                    finish();
+                    break;
+                case GO_HOME2://去主页,带参数
+                    Intent intent3=new Intent(SplashActivity.this,MainActivity.class);
+                    intent3.putExtra(MyConstant.EXTRA_BUNDLE,getIntent().getBundleExtra(MyConstant.EXTRA_BUNDLE));
+                    startActivity(intent3);
                     finish();
                     break;
                 case GO_LOGIN://去登录页
@@ -50,6 +58,14 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //先判断是否是刚点的返回桌面后再进的
+        if ((getIntent().getFlags()&Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)!=0){
+            finish();
+            return;
+            //再判断一下是不是APP已经被KILL了用户从点击通知栏进入的
+        }else if (getIntent().getBundleExtra(MyConstant.EXTRA_BUNDLE)!=null){
+            mHandler.sendEmptyMessageDelayed(GO_HOME2, 2000);
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);  //无title
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);  //全屏

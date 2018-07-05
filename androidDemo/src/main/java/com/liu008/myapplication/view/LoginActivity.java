@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         passWord = MyUtils.getMD5(passWord + "LaoSiJi");
         userInfo.setPassWord(passWord);
         userInfo.setClientId(MyConstant.AUDIENCE_CLIENTID);
-        MyUtils.postRequest(userInfo, mHandler, MyConstant.APPSERVER_URL+"oauth/token");
+        MyUtils.postRequest(userInfo, mHandler, MyConstant.APPSERVER_URL+"oauth/login");
     }
 
     private Handler mHandler = new Handler() {

@@ -2,15 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/smssdk_gray"
-    android:layout_centerInParent="true">
+    android:layout_centerInParent="true"
+    android:gravity="center_vertical"
+    android:background="@color/colorPingDao"
+    android:orientation="horizontal">
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:id="@+id/tv_PingDaoLan"
+        android:layout_width="wrap_content"
+        android:layout_height="62dp"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
         android:text="这是频道栏"
-        android:textColor="#F0F"
+        android:textColor="@color/white"
         />
+    <RelativeLayout
+        android:id="@+id/rl_PingDaoSetting"
+        android:layout_width="100dp"
+        android:layout_height="62dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:background="@color/white"
+        >
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_setting_blue"/>
+    </RelativeLayout>
 
 </LinearLayout>

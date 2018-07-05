@@ -1,1 +1,1 @@
-include ':androidDemo'
+include ':androidDemo',':IMKit','IMLib','RedPacket','CallKit','CallLib'

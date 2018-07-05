@@ -11,6 +11,7 @@ MobSDK {
 }
 
 
+
 android {
     compileSdkVersion 26
 
@@ -24,7 +25,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
 
     buildTypes {
@@ -33,10 +36,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    sourceSets{
+        main{
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
+    compile fileTree(include: '*.so', dir: 'libs')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.0.0-alpha1'
@@ -57,4 +65,5 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.56.android'
     implementation 'com.zhy:autolayout:1.4.5'
 
+    compile project(':IMKit')
 }
