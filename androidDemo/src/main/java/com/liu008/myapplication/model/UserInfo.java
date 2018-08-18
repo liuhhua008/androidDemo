@@ -15,6 +15,15 @@ public class UserInfo {
      */
     private  String passWord;
     private String clientId;
+    private String nickName;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     public String getClientId() {
         return clientId;

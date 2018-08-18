@@ -33,8 +33,7 @@ public class PushService extends Service {
         super.onCreate();
         //把服务启动成前台服务，并弹出自定义通知栏
         System.out.println("PushService 执行了Oncreate");
-        startForeground(110,
-                ResidentNotificationHelper.sendResidentNoticeType0(this, "Test", "008号频道正在....", R.mipmap.ic_discovery_gray) );
+
     }
 
     /**
@@ -48,6 +47,9 @@ public class PushService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         System.out.println("PushService 执行了onStartCommand");
+        //每次点进入频道主页都会执行发送通知栏
+        startForeground(110,
+                ResidentNotificationHelper.sendResidentNoticeType0(this, "Test", "008号频道正在....", R.mipmap.ic_discovery_gray) );
         String command = intent.getStringExtra("command");
         if ("closeService".equals(command)) {
             onDestroy();

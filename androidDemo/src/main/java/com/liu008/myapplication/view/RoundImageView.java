@@ -14,14 +14,32 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.liu008.myapplication.R;
+import com.liu008.myapplication.model.UserManage;
+import com.liu008.myapplication.utils.FileUtils;
+import com.liu008.myapplication.utils.ImageUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RoundImageView extends android.support.v7.widget.AppCompatImageView {
+    public static final int GET_DATA_SUCCESS = 10;
+    public static final int NETWORK_ERROR = 20;
+    public static final int SERVER_ERROR = 30;
     /**
      * 圆形模式
      */
@@ -40,6 +58,29 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
      * 圆角半径
      */
     private int currRound = dp2px(10);
+    //子线程不能操作UI，通过Handler设置图片
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case GET_DATA_SUCCESS:
+                    Map<String,Object> map = (Map) msg.obj;
+                    String fileName=(String) map.get("fileName");
+                    Bitmap bitmap= (Bitmap) map.get("bitmap");
+                    setImageBitmap(bitmap);
+                    String path= Environment.getExternalStorageDirectory().getAbsolutePath()+"/LaoSiJi/";
+                    //在本地也保存一份
+                    ImageUtils.savePhoto(bitmap, path, FileUtils.getFileNameNoEx(fileName));
+                    break;
+                case NETWORK_ERROR:
+                    Toast.makeText(getContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+                    break;
+                case SERVER_ERROR:
+                    Toast.makeText(getContext(), "服务器发生错误", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     public RoundImageView(Context context) {
         super(context);
@@ -179,5 +220,39 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
 
     private int dp2px(float value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
+    }
+
+    public void setImageURL(final String path){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    URL url =new URL(path);
+                    HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(10000);
+                    int code=connection.getResponseCode();
+                    if (code==200){
+                        InputStream inputStream=connection.getInputStream();
+                        Bitmap bitmap=BitmapFactory.decodeStream(inputStream);
+                        Message msg=Message.obtain();
+                        msg.what=GET_DATA_SUCCESS;
+                        Map<String,Object> map=new HashMap<>();
+                        map.put("bitmap",bitmap);
+                        map.put("fileName",path.substring(path.lastIndexOf("/")+1));
+                        msg.obj=map;
+                        handler.sendMessage(msg);
+                        inputStream.close();
+                    }else {
+                        //服务启发生错误
+                        handler.sendEmptyMessage(SERVER_ERROR);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    //网络连接错误
+                    handler.sendEmptyMessage(NETWORK_ERROR);
+                }
+            }
+        }.start();
     }
 }

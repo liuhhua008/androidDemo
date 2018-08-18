@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.liu008.myapplication">
+
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- 短信权限 -->
 
@@ -11,11 +13,14 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允许程序访问WiFi网络信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MyApplication"
@@ -26,13 +31,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- 融云SDK -->
+        <meta-data
+            android:name="RONG_CLOUD_APP_KEY"
+            android:value="e0x9wycfe48vq" />
+        <!-- 高德地图 -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="fef9a99a53b190a8e4d69b1b4e1127d8" />
         <!-- 设计搞屏幕自动适配 -->
         <meta-data
             android:name="design_width"
-            android:value="720"></meta-data>
+            android:value="720" />
         <meta-data
             android:name="design_height"
-            android:value="1280"></meta-data>
+            android:value="1280" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.liu008.myapplication.FileProvider"
@@ -43,14 +57,27 @@
                 android:resource="@xml/rc_file_path" />
         </provider>
 
-        <service android:name=".service.PinDaoService" />
-        <service android:name=".service.PushService"
-            android:process=":push"/>
+        <service
+            android:name=".service.PushService"
+            android:process=":push" />
+        <!-- 定位 -->
+        <service android:name="com.amap.api.location.APSService" />
 
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.song.rongyundemo"
+                    android:pathPrefix="/push_message"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
@@ -61,24 +88,58 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.LoginActivity"
-            android:launchMode="singleInstance"
+            android:name=".activity.LoginActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.RegisterActivity"
+            android:name=".activity.RegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!--             android:theme="@android:style/Theme.Translucent.NoTitleBar" -->
-        <activity android:name=".view.PingDaoActivity"
+        <!-- android:theme="@android:style/Theme.Translucent.NoTitleBar" -->
+        <activity
+            android:name=".activity.PingDaoActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="io.rong.fast"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
 
         <receiver android:name=".receiver.NotificationReceiver">
             <intent-filter>
-                <action android:name="com.liu008.action.notice"/>
+                <action android:name="com.liu008.action.notice" />
             </intent-filter>
         </receiver>
+        <!-- 聊天界面 -->
+        <activity
+            android:name=".activity.ConversationActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.song.rongyundemo"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.MyContactActivity" />
+        <activity android:name=".activity.AddFriendActivity" />
+        <activity android:name=".activity.me.MeinfoActivity" />
+        <activity android:name=".activity.me.ImageHeadActivity"></activity>
     </application>
 
 </manifest>

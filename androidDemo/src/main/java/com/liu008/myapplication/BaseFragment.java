@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -20,14 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.liu008.myapplication.model.AccessToken;
-import com.liu008.myapplication.service.PinDaoService;
 import com.liu008.myapplication.service.PushService;
 import com.liu008.myapplication.utils.ApiHttpClient;
 import com.liu008.myapplication.utils.MyConstant;
 import com.liu008.myapplication.utils.ResultMsg;
-import com.liu008.myapplication.view.PingDaoActivity;
+import com.liu008.myapplication.activity.PingDaoActivity;
 
 
 import java.io.IOException;
@@ -64,18 +60,20 @@ public class BaseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //showNotification();
-                //启动Service
+                //1.启动Service
                 getContext().startService(new Intent(getContext(), PushService.class));
-                //从底部弹出一个提示条目
+                //2.从底部弹出一个提示条目
                 //Snackbar.make(v, "Don't click me.please!.", Snackbar.LENGTH_SHORT).show();
                 FrameLayout mContentContainer;
-                //拿到除顶层窗口对象，对像ChildAt（0）为标题栏，1为下面全部内容
+                //3.拿到除顶层窗口对象，对像ChildAt（0）为标题栏，1为下面全部内容
                 ViewGroup mDecorView= (ViewGroup) getActivity().getWindow().getDecorView();
+                //4.先拿到activity的根布局容器，再在里面找标记容器
                 //在子类Activity中去把标记为"folat_tag_frameLayout"的FrameLayout拿出来作为容器
                 mContentContainer = (FrameLayout) ((ViewGroup)mDecorView.
                         getChildAt(0)).findViewWithTag("folat_tag_frameLayout");
+                //5.把这个VIEW容器显示出来
                 mContentContainer.setVisibility(View.VISIBLE);
-                //获取固定浮动栏的VIEW控件
+                //6.获取固定浮动栏的VIEW控件
                 final AppCompatActivity manActivity= (AppCompatActivity) getActivity();
                 TextView textView = (TextView) manActivity.findViewById(R.id.tv_PingDaoLan);
                 RelativeLayout rl_PingDaoSetting= (RelativeLayout) manActivity.findViewById(R.id.rl_PingDaoSetting);
@@ -89,7 +87,7 @@ public class BaseFragment extends Fragment {
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getContext().startService(new Intent(getContext(), PushService.class));
+                        //getContext().startService(new Intent(getContext(), PushService.class));
                         startActivity(new Intent(getContext(), PingDaoActivity.class));
                     }
                 });

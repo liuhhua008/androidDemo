@@ -9,6 +9,7 @@ buildscript {
         }
 
     }
+
     dependencies {
         // 注册MobSDK
         classpath "com.mob.sdk:MobSDK:+"
@@ -29,3 +30,4 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+

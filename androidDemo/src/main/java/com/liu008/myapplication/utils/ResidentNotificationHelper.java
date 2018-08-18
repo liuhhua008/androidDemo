@@ -10,9 +10,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import com.liu008.myapplication.MainActivity;
 import com.liu008.myapplication.R;
-import com.liu008.myapplication.view.PingDaoActivity;
 
 /**
  * Created by kris on 16/4/14.

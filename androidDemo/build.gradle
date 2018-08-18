@@ -26,7 +26,9 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86"
+//, "arm64-v8a", "x86","arm64-v8a","x86_64"
         }
     }
 
@@ -36,15 +38,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets{
-        main{
-            jniLibs.srcDirs = ['libs']
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs', 'lib']
         }
     }
 }
 
 dependencies {
-    compile fileTree(include: '*.so', dir: 'libs')
+    implementation fileTree(include: '*.so', dir: 'libs')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:26.0.0-alpha1'
@@ -60,10 +62,18 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.2.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    //implementation 'com.github.bumptech.glide:glide:3.7.0'
     testImplementation 'junit:junit:4.12'
     implementation 'com.alibaba:fastjson:1.1.56.android'
     implementation 'com.zhy:autolayout:1.4.5'
-
-    compile project(':IMKit')
+    implementation 'com.github.bumptech.glide:glide:4.0.0'
+    api project(':IMKit')
+    implementation 'org.kie.modules:org-apache-commons-lang3:6.5.0.Final'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4'
+    implementation 'com.amap.api:3dmap:latest.integration'
+    //定位功能
+    implementation 'com.amap.api:location:latest.integration'
+    //搜索功能
+    //implementation 'com.amap.api:search:latest.integration'
+    implementation 'com.wuhenzhizao:titlebar:1.1.1'
 }

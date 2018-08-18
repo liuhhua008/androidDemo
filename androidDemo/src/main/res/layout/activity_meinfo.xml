@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.me.MeinfoActivity"
+    android:background="@color/main_bg5"
+    android:orientation="vertical">
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/meinfo_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleBarHeight="?attr/actionBarSize"
+        app:titleBarColor="@color/colorPrimary"
+        app:fillStatusBar="true"
+        app:statusBarColor="@color/colorPrimary"
+        app:statusBarMode="light"
+        app:leftType="imageButton"
+        app:leftImageResource="@mipmap/ic_back_normal01"
+        app:centerType="textView"
+        app:centerTextColor="@color/white"
+        app:centerText="个人信息"
+        />
+    <RelativeLayout
+        android:id="@+id/rl_meinfo_head"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginVertical="10dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:text="头像:" />
+        <ImageView
+            android:id="@+id/iv_meinfo_head"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@mipmap/ic_offical"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_meinfo_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:text="昵称:" />
+        <TextView
+            android:id="@+id/tv_meinfo_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_meinfo_id"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:text="账号:" />
+        <TextView
+            android:id="@+id/tv_meinfo_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_meinfo_gender"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:text="性别:" />
+        <TextView
+            android:id="@+id/tv_meinfo_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="男"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_meinfo_area"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:text="地区:" />
+        <TextView
+            android:id="@+id/tv_meinfo_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:text="长沙"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</LinearLayout>

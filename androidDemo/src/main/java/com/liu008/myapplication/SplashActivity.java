@@ -3,7 +3,6 @@ package com.liu008.myapplication;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.os.UserManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -11,8 +10,8 @@ import android.view.WindowManager;
 
 import com.liu008.myapplication.model.UserManage;
 import com.liu008.myapplication.utils.MyConstant;
-import com.liu008.myapplication.view.LoginActivity;
-import com.liu008.myapplication.view.RegisterActivity;
+import com.liu008.myapplication.activity.LoginActivity;
+import com.liu008.myapplication.activity.RegisterActivity;
 
 /**
  * 启动页，app刚打开时的activity

@@ -12,7 +12,8 @@ public enum ResultStatusCode {
     INVALID_PASSWORD(50002,"invalid_password"),
     INVALID_TOKEN(60001,"invalid_token"),
     EXPIRES_TOKEN(60002,"expires_token"),
-    USERALREADY_REGISTERED(70001,"Already registered");
+    USERALREADY_REGISTERED(70001,"Already registered"),
+    FINDUSER_NOFIND(80001,"No find this user");
 
     private int errcode;
     private String errmsg;

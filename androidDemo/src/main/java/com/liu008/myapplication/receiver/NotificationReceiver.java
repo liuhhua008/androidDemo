@@ -12,7 +12,7 @@ import com.liu008.myapplication.service.PushService;
 import com.liu008.myapplication.utils.MyConstant;
 import com.liu008.myapplication.utils.ResidentNotificationHelper;
 import com.liu008.myapplication.utils.SystemUtil;
-import com.liu008.myapplication.view.PingDaoActivity;
+import com.liu008.myapplication.activity.PingDaoActivity;
 
 import java.lang.reflect.Method;
 

@@ -53,7 +53,8 @@ public class ImageUtils {
                 if (photoBitmap != null) {
                    // if (photoBitmap.compress(Bitmap.CompressFormat.PNG, 100,
                     if (photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100,
-                            fileOutputStream)) { // ×ª»»Íê³É
+                            fileOutputStream)) {
+                        // è½¬æ¢å®Œæˆ
                         localPath = photoFile.getPath();
                         fileOutputStream.flush();
                     }
@@ -81,9 +82,9 @@ public class ImageUtils {
     }
 
     /**
-     * ×ª»»Í¼Æ¬³ÉÔ²ĞÎ
+     * è½¬æ¢å›¾ç‰‡æˆåœ†å½¢
      *
-     * @param bitmap ´«ÈëBitmap¶ÔÏó
+     * @param bitmap ä¼ å…¥Bitmapå¯¹è±¡
      * @return
      */
     public static Bitmap toRoundBitmap(Bitmap bitmap) {
@@ -135,41 +136,43 @@ public class ImageUtils {
 
 
     /**
-     *
+     *ä¸Šä¼ å¤´åƒè‡³æœåŠ¡å™¨
      * @param url
      * @param file
      * @param jsonObject
      * @param httpResponseCallBack
      */
     public static void upLoadImage (Context context,String url, File file, JSONObject jsonObject, final HttpResponseCallBack httpResponseCallBack){
-        //¶¨ÒåÒ»¸öJSONµÄMediaType£¨»¥ÁªÍøÃ½ÌåÀàĞÍ£©
+        //å®šä¹‰ä¸€ä¸ªJSONçš„MediaTypeï¼ˆäº’è”ç½‘åª’ä½“ç±»å‹ï¼‰
        // final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        //1.¶¨ÒåÒ»¸öOkhttpClient
+        //1.å®šä¹‰ä¸€ä¸ªOkhttpClient
         OkHttpClient client= ApiHttpClient.getInstance(context);
-        //2.½¨Á¢body£¬È»ºóÉèÖÃÕâ¸öbodyÀïÃæ·ÅµÄÊı¾İÀàĞÍÊÇÊ²Ã´¡£
+        //2.å»ºç«‹bodyï¼Œç„¶åè®¾ç½®è¿™ä¸ªbodyé‡Œé¢æ”¾çš„æ•°æ®ç±»å‹æ˜¯ä»€ä¹ˆã€‚
         MultipartBody.Builder builder=new MultipartBody.Builder().setType(MultipartBody.FORM);
         String userId=UserManage.getInstance().getUserId(context);
-        //±íµ¥ÖĞ¼ÓÈëfile
-        builder.addFormDataPart("file",userId+".jpg",RequestBody.create(MediaType.parse("image/jpg"), file));
-        //´Ó±¾µØ»ñÈ¡userid·ÅÈë±íµ¥
+        //è¡¨å•ä¸­åŠ å…¥file
+        builder.addFormDataPart("file",userId+"-"+String.valueOf(System.currentTimeMillis())+".jpg",RequestBody.create(MediaType.parse("image/jpg"), file));
+        //ä»æœ¬åœ°è·å–useridæ”¾å…¥è¡¨å•
         builder.addFormDataPart("userId", userId);
         RequestBody body =builder.build();
 
-        //3.´´½¨Ò»¸öÇëÇó£¬ÀûÓÃ¹¹½¨Æ÷·½Ê½Ìí¼ÓurlºÍÇëÇóÌå¡£
+        //3.åˆ›å»ºä¸€ä¸ªè¯·æ±‚ï¼Œåˆ©ç”¨æ„å»ºå™¨æ–¹å¼æ·»åŠ urlå’Œè¯·æ±‚ä½“ã€‚
         Request request = new Request.Builder().post(body).url(url).build();
-        //4.¶¨ÒåÒ»¸öcall£¬ÀûÓÃokhttpclientµÄnewcall·½·¨À´´´½¨¶ÔÏó¡£ÒòÎªCallÊÇÒ»¸ö½Ó¿Ú²»ÄÜÀûÓÃ¹¹ÔìÆ÷ÊµÀı»¯¡£
+        //4.å®šä¹‰ä¸€ä¸ªcallï¼Œåˆ©ç”¨okhttpclientçš„newcallæ–¹æ³•æ¥åˆ›å»ºå¯¹è±¡ã€‚å› ä¸ºCallæ˜¯ä¸€ä¸ªæ¥å£ä¸èƒ½åˆ©ç”¨æ„é€ å™¨å®ä¾‹åŒ–ã€‚
         Call call = client.newCall(request);
-        //5.ÕâÊÇÒì²½µ÷¶È·½·¨£¬ÉÏ´«ºÍ½ÓÊÜµÄ¹¤×÷¶¼ÔÚ×ÓÏß³ÌÀïÃæÔË×÷£¬Èç¹ûÒªÊ¹ÓÃÍ¬²½µÄ·½·¨¾ÍÓÃcall.excute(),´Ë·½·¨·µ»ØµÄ¾ÍÊÇResponse
+        //5.è¿™æ˜¯å¼‚æ­¥è°ƒåº¦æ–¹æ³•ï¼Œä¸Šä¼ å’Œæ¥å—çš„å·¥ä½œéƒ½åœ¨å­çº¿ç¨‹é‡Œé¢è¿ä½œï¼Œå¦‚æœè¦ä½¿ç”¨åŒæ­¥çš„æ–¹æ³•å°±ç”¨call.excute(),æ­¤æ–¹æ³•è¿”å›çš„å°±æ˜¯Response
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                httpResponseCallBack.error(e);//´íÎó·¢ÉúÊ±µÄ´¦Àí
+                httpResponseCallBack.error(e);//é”™è¯¯å‘ç”Ÿæ—¶çš„å¤„ç†
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                httpResponseCallBack.response(response.body().string());//°Ñ·şÎñÆ÷·¢»ØÀ´µÄÊı¾İresponse½âÎö³Éstring´«Èë·½·¨
+                httpResponseCallBack.response(response.body().string());//æŠŠæœåŠ¡å™¨å‘å›æ¥çš„æ•°æ®responseè§£ææˆstringä¼ å…¥æ–¹æ³•
             }
         });
     }
+
+
 }

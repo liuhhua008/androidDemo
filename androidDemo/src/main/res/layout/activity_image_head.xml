@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.me.ImageHeadActivity"
+    android:orientation="vertical">
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/imagehead_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleBarHeight="?attr/actionBarSize"
+        app:titleBarColor="@color/colorPrimary"
+        app:fillStatusBar="true"
+        app:statusBarColor="@color/colorPrimary"
+        app:statusBarMode="light"
+        app:leftType="imageButton"
+        app:leftImageResource="@mipmap/ic_back_normal01"
+        app:centerType="textView"
+        app:centerTextColor="@color/white"
+        app:centerText="头像"
+        app:rightType="textView"
+        app:rightText="修改"
+        app:rightTextColor="@color/white"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <io.rong.photoview.PhotoView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/iv_imagehead"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_imagehead"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:adjustViewBounds="true"/>-->
+    </RelativeLayout>
+
+</LinearLayout>
