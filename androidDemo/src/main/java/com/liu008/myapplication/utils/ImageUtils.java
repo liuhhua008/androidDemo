@@ -9,6 +9,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.liu008.myapplication.http.HttpResponseCallBack;
 import com.liu008.myapplication.model.UserManage;
@@ -33,7 +34,7 @@ public class ImageUtils {
      *
      * @param photoBitmap
      * @param photoName
-     * @param path
+     * @param path 本地生成图片路径的目录
      */
     public static String savePhoto(Bitmap photoBitmap, String path,
                                    String photoName) {
@@ -169,7 +170,7 @@ public class ImageUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                httpResponseCallBack.response(response.body().string());//把服务器发回来的数据response解析成string传入方法
+                httpResponseCallBack.response(response.body().string());
             }
         });
     }

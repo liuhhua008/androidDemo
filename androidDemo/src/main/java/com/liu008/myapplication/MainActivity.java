@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.view.menu.MenuBuilder;
@@ -21,7 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.liu008.myapplication.activity.MyContactActivity;
+import com.liu008.myapplication.activity.MyPhoneContactActivity;
+import com.liu008.myapplication.activity.me.ContactsListActivity;
 import com.liu008.myapplication.adapter.ViewPagerAdapter;
 import com.liu008.myapplication.utils.DragPointView;
 import com.liu008.myapplication.utils.MyConstant;
@@ -30,7 +30,6 @@ import com.liu008.myapplication.activity.BaseActivity;
 import com.liu008.myapplication.fragment.MeFragment;
 import com.liu008.myapplication.activity.PingDaoActivity;
 import com.liu008.myapplication.utils.NetUtils;
-import com.liu008.myapplication.utils.UserUtils;
 
 import java.util.List;
 
@@ -39,7 +38,6 @@ import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.UserInfo;
 
 public class MainActivity extends BaseActivity implements IUnReadMessageObserver, DragPointView.OnDragListencer, View.OnClickListener {
     private ViewPager viewPager;
@@ -63,6 +61,8 @@ public class MainActivity extends BaseActivity implements IUnReadMessageObserver
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i("info", "activity_onCreate-执行了: ");
+        //聊天会话列表的监听注册
+        //RongIM.setConversationListBehaviorListener(new MyConversationListBehaviorListener());
         initView();
         //如果是从频道通知栏点击激发启动的，应该继续跳转
         checkIsNotification();
@@ -158,13 +158,13 @@ public class MainActivity extends BaseActivity implements IUnReadMessageObserver
                 //订阅号
                 .appendQueryParameter(Conversation.ConversationType.PUBLIC_SERVICE.getName(), "false")
                 //系统
-                .appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(), "false")
+                //.appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(), "true")
                 .build();
         mConversationsTypes = new Conversation.ConversationType[]{Conversation.ConversationType.PRIVATE,
                 Conversation.ConversationType.GROUP,
                 Conversation.ConversationType.PUBLIC_SERVICE,
                 Conversation.ConversationType.APP_PUBLIC_SERVICE,
-                Conversation.ConversationType.SYSTEM,
+                //Conversation.ConversationType.SYSTEM,
                 Conversation.ConversationType.DISCUSSION
         };
         listFragment.setUri(uri);
@@ -180,16 +180,9 @@ public class MainActivity extends BaseActivity implements IUnReadMessageObserver
                 Conversation.ConversationType.GROUP, Conversation.ConversationType.SYSTEM,
                 Conversation.ConversationType.PUBLIC_SERVICE, Conversation.ConversationType.APP_PUBLIC_SERVICE
         };
-        //未读消息
+        //设置未读消息都有哪些类型
         RongIM.getInstance().addUnReadMessageCountChangedObserver(this, conversationTypes);
-        // 设置用户信息的提供者，供 RongIM 调用获取用户名称和头像信息。
-        RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-            //自己实现此方法来完成用户信息的提取工作
-            @Override
-            public UserInfo getUserInfo(String userId) {
-                return UserUtils.getImUserInfo(MainActivity.this,mHandler);
-            }
-        }, true);//这里为true代表信息缓存到本地
+
         //刷新用户缓存数据。
 //      RongIM.getInstance().refreshUserInfoCache(new UserInfo(connectResultId, nickName, Uri.parse(portraitUri)));
     }
@@ -233,7 +226,7 @@ public class MainActivity extends BaseActivity implements IUnReadMessageObserver
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_friends://好友列表
-                startActivity(new Intent(this, MyContactActivity.class));
+                startActivity(new Intent(this, ContactsListActivity.class));
                 break;
             case R.id.test_menu1:
                 Toast.makeText(MainActivity.this, "菜单1", Toast.LENGTH_SHORT).show();
@@ -288,7 +281,7 @@ public class MainActivity extends BaseActivity implements IUnReadMessageObserver
 
     /**
      * 设置未读消息的显示
-     *
+     * IUnReadMessageObserver接口
      * @param count 未读消息数量
      */
     @Override

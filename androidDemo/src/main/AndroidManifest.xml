@@ -73,7 +73,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="com.song.rongyundemo"
+                    android:host="com.liu008.myapplication"
                     android:pathPrefix="/push_message"
                     android:scheme="rong" />
             </intent-filter>
@@ -108,8 +108,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="io.rong.fast"
-                    android:pathPrefix="/conversation/"
+                    android:host="com.liu008.myapplication"
+                    android:pathPrefix="/pingdao/"
                     android:scheme="rong" />
             </intent-filter>
         </activity>
@@ -119,6 +119,15 @@
                 <action android:name="com.liu008.action.notice" />
             </intent-filter>
         </receiver>
+        <!-- 监听网络状态变化 -->
+        <receiver android:name=".receiver.NetworkConnectChangedReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <!-- 聊天界面 -->
         <activity
             android:name=".activity.ConversationActivity"
@@ -131,15 +140,32 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="com.song.rongyundemo"
+                    android:host="com.liu008.myapplication"
                     android:pathPrefix="/conversation/"
                     android:scheme="rong" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MyContactActivity" />
+        <activity android:name=".activity.MyPhoneContactActivity" />
         <activity android:name=".activity.AddFriendActivity" />
         <activity android:name=".activity.me.MeinfoActivity" />
-        <activity android:name=".activity.me.ImageHeadActivity"></activity>
+        <activity android:name=".activity.me.ImageHeadActivity" />
+        <activity android:name=".activity.me.ContactInfoActivity" />
+        <activity
+            android:name=".activity.SubConversationListActivtiy"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.liu008.myapplication"
+                    android:pathPrefix="/subconversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.me.ContactsListActivity"></activity>
     </application>
 
 </manifest>

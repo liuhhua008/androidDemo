@@ -13,7 +13,11 @@ public enum ResultStatusCode {
     INVALID_TOKEN(60001,"invalid_token"),
     EXPIRES_TOKEN(60002,"expires_token"),
     USERALREADY_REGISTERED(70001,"Already registered"),
-    FINDUSER_NOFIND(80001,"No find this user");
+    UPFILE_SCUESS(80000,"上传成功!"),
+    UPFILE_ERR(80001,"upfile error"),
+    UPFILE_TYPEERR(80002,"上传的文件不是图片类型，请重新上传!"),
+    UPFILE_NOFILE(80003,"上传失败，请选择要上传的图片!"),
+    FINDUSER_NOFIND(90001,"No find this user");
 
     private int errcode;
     private String errmsg;

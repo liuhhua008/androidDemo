@@ -1,28 +1,49 @@
 package com.liu008.myapplication.entity;
 
-public class IMuserInfo {
-    private String userId;
+/**
+ * 加好友的item信息类
+ */
+public class CNitemInfo {
+    private String operation;
+    private String sourceId;
+    private String targetId;
+    private String message;
     private String name;
     private String nickname;
     private String portraitUri;
     private int relation;
     private String statusCode;
 
-    public IMuserInfo() {
+    public String getOperation() {
+        return operation;
     }
 
-    public IMuserInfo(String userId, String name, String portraitUri) {
-        this.userId = userId;
-        this.name = name;
-        this.portraitUri = portraitUri;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public String getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getName() {

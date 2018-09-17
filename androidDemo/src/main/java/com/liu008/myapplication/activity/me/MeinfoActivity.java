@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.liu008.myapplication.MyApplication;
 import com.liu008.myapplication.R;
 import com.liu008.myapplication.entity.UserBasicInfo;
+import com.liu008.myapplication.manager.DataCallback;
 import com.liu008.myapplication.utils.NToast;
 import com.liu008.myapplication.utils.PermissionUtil;
 import com.liu008.myapplication.utils.ToolUtils;
@@ -54,7 +55,17 @@ public class MeinfoActivity extends AppCompatActivity implements View.OnClickLis
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1://提交成功
-                    UserUtils.getSaveUserBasicInfo(MeinfoActivity.this,mHandler);//这里还会返回200的消息，不过没什么必要处理
+                    UserUtils.getSaveUserBasicInfo(MeinfoActivity.this, new DataCallback() {
+                        @Override
+                        public void onSucess(Object object) {
+
+                        }
+
+                        @Override
+                        public void failed() {
+
+                        }
+                    });//这里还会返回200的消息，不过没什么必要处理
                     CustomProgress.dimiss();
                     NToast.longToast(MeinfoActivity.this, "提交成功");
                     break;
@@ -82,15 +93,18 @@ public class MeinfoActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initData() {
         //先从本地读取信息，没有再从服务器上获取个人信息并显示
-        if (MyApplication.getUserBasicInfo() != null) {
-            userBasicInfo = MyApplication.getUserBasicInfo();
-        } else if (UserUtils.getBaseUserInfoForSP(this) != null) {
-            userBasicInfo = UserUtils.getBaseUserInfoForSP(this);
+        if((userBasicInfo=UserUtils.getUserInfo())!=null){
+            //显示头像
+            Glide.with(this).load(userBasicInfo.getHeadImageUrl()).apply(new RequestOptions().error(R.mipmap.img_error)).into(ivHead);
+            tvNickname.setText(userBasicInfo.getNickName());
+            tvId.setText(userBasicInfo.getUserName());
         }
-        //显示头像
-        Glide.with(this).load(userBasicInfo.getHeadImageUrl()).apply(new RequestOptions().error(R.mipmap.img_error)).into(ivHead);
-        tvNickname.setText(userBasicInfo.getNickName());
-        tvId.setText(userBasicInfo.getUserName());
+//        if (MyApplication.getUserBasicInfo() != null) {
+//            userBasicInfo = MyApplication.getUserBasicInfo();
+//        } else if (UserUtils.getBaseUserInfoForSP(this) != null) {
+//            userBasicInfo = UserUtils.getBaseUserInfoForSP(this);
+//        }
+
     }
 
     private void initview() {

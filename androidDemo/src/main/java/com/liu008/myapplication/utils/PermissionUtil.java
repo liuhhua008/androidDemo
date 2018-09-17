@@ -150,8 +150,7 @@ public class PermissionUtil {
      * 在 onActivityResult() 中还需要对权限进行判断，因为用户有可能没有授权就返回了！<br/>
      */
     public static void startApplicationDetailsSettings(@NonNull Activity activity, int requestCode) {
-        Toast.makeText(activity, "点击权限，并打开全部权限", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(activity, "使用此功能需在设置中点击权限，并打开权限", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
         intent.setData(uri);

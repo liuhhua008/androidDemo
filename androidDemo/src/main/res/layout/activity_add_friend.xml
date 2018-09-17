@@ -20,6 +20,7 @@
     app:leftImageResource="@mipmap/ic_back_normal01"
     app:centerType="searchView"
     app:centerSearchEditable="true"
+    app:centerSearchRightType="delete"
     app:rightType="textView"
     app:rightTextColor="@color/white"
     app:rightText="查找"
@@ -33,12 +34,14 @@
         android:textSize="18sp"
         android:padding="60dp"
         android:background="@color/white"
+        android:visibility="gone"
         android:gravity="center"
         />
     <ListView
         android:id="@+id/addfriend_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
         android:layout_gravity="center"
         android:background="@color/white"
         android:listSelector="@drawable/comm_btn_selector" />

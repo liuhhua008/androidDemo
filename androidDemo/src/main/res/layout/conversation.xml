@@ -10,7 +10,7 @@
         android:id="@+id/layout_head"
         android:layout_width="match_parent"
         android:layout_height="48dip"
-        android:background="#0195ff"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <Button
@@ -28,7 +28,7 @@
             android:layout_height="24dp"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
-            android:background="#0083e0" />
+            android:background="@color/colorPrimary" />
 
 
         <TextView

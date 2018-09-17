@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,16 +26,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.liu008.myapplication.R;
+import com.liu008.myapplication.entity.UserBasicInfo;
 import com.liu008.myapplication.http.HttpResponseCallBack;
+import com.liu008.myapplication.manager.DataCallback;
 import com.liu008.myapplication.model.UserManage;
 import com.liu008.myapplication.utils.BitmapUtil;
 import com.liu008.myapplication.utils.ImageUtils;
 import com.liu008.myapplication.utils.MyConstant;
 import com.liu008.myapplication.utils.PermissionUtil;
+import com.liu008.myapplication.utils.ResultMsg;
+import com.liu008.myapplication.utils.ResultStatusCode;
 import com.liu008.myapplication.utils.UserUtils;
 import com.liu008.myapplication.view.CustomProgress;
 import com.wuhenzhizao.titlebar.widget.CommonTitleBar;
@@ -56,15 +62,20 @@ public class ImageHeadActivity extends AppCompatActivity {
     private Bitmap mBitmap;
     private File mAvatarFile;//用来做系统剪裁的图片文件
     private File fileUri; //拍照产生照片文件
+    private File fileCorp; //裁剪后的文件
     private Handler mHandler=new Handler(){
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(final Message msg) {
             switch (msg.what){
-                case 500:
-                    //这里执行后台刷新个人信息了，否则个人信息还是老的
-                    UserUtils.getSaveUserBasicInfo(ImageHeadActivity.this,mHandler);
+                case 400://服务器返回的失败
                     CustomProgress.dimiss();
-                    imageView.setImageBitmap(mBitmap);
+                    Toast.makeText(ImageHeadActivity.this, msg.obj.toString(), Toast.LENGTH_SHORT).show();
+
+                    break;
+                case 500://上传头像成功
+                    //这里执行后台刷新个人信息了，否则个人信息还是老的
+                    UserManage.getInstance().getCurrentUserinfo();
+                    CustomProgress.dimiss();
                     Toast.makeText(ImageHeadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -89,7 +100,10 @@ public class ImageHeadActivity extends AppCompatActivity {
                         }
                         break;
                         case CommonTitleBar.ACTION_RIGHT_TEXT:
-                            showChoosePicDialog();
+                            if (PermissionUtil.getCameraPermissions(ImageHeadActivity.this,REQUEST_CODE_CAMERA)){
+                                showChoosePicDialog();
+                            }
+
                             break;
                         default:break;
                 }
@@ -115,10 +129,15 @@ public class ImageHeadActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case CHOOSE_PICTURE: // 选择本地照片
-                        allPhoto();
+                        if (PermissionUtil.getExternalStoragePermissions(ImageHeadActivity.this, 102)) {
+                            allPhoto();
+                        }
                         break;
                     case TAKE_PICTURE: // 拍照
-                        takePicture();
+                        //申请相机权限,已经包含了存储读写权限
+                        if (PermissionUtil.getCameraPermissions(ImageHeadActivity.this, 101)) {
+                            takePicture();
+                        }
                         break;
                 }
             }
@@ -142,19 +161,12 @@ public class ImageHeadActivity extends AppCompatActivity {
      *
      * @param
      */
-    protected void setImageToView(Intent data) {
-//        Bundle extras = data.getExtras();
-//        if (extras != null) {
-//            Bitmap photo = extras.getParcelable("data");
-//            //Log.d(TAG, "setImageToView:" + photo);
-//            // photo = ImageUtils.toRoundBitmap(photo); // 这个时候的图片已经被处理成圆形的了
-//            //imageView.setImageBitmap(photo);
-//            CustomProgress.show(ImageHeadActivity.this,"上传头像中...",false,null);
-//            uploadPic(photo);
-//        }
-        if (fileUri!=null){
-            Bitmap photo=BitmapUtil.getSmallBitmap(fileUri.getAbsolutePath(),300,300);
+    protected void setImageToView() {
+        if (fileCorp!=null){
+            Bitmap photo=BitmapUtil.getSmallBitmap(fileCorp.getAbsolutePath(),300,300);
+           //先不管上传成功或失败，先显示
             imageView.setImageBitmap(photo);
+            CustomProgress.show(ImageHeadActivity.this,"上传中...",false,null);
             uploadPic(photo);
         }
     }
@@ -196,10 +208,27 @@ public class ImageHeadActivity extends AppCompatActivity {
         intent.putExtra("outputX", 700);
         intent.putExtra("outputY", 700);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        //裁剪后的图片放在哪里
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fileUri));
         //返回数据
         intent.putExtra("return-data", false);//return置为false，获取截图保存的uri
+        File file = new File(this.getFilesDir(),"photos");
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        //mPhotoPath =file.getAbsolutePath() +"/"+ String.valueOf(System.currentTimeMillis()) + ".jpg";
+        fileCorp = new File(file.getAbsolutePath() +"/tempCorp.jpg");
+        //裁剪后的图片放在哪里
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            tempUri=FileProvider.getUriForFile(ImageHeadActivity.this, "com.liu008.myapplication.FileProvider", fileCorp);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
+            //将存储图片的uri读写权限授权给剪裁工具应用
+            List<ResolveInfo> resInfoList = ImageHeadActivity.this.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                ImageHeadActivity.this.grantUriPermission(packageName, tempUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+        }else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fileCorp));
+        }
         startActivityForResult(intent, CROP_SMALL_PICTURE);
     }
 
@@ -221,27 +250,22 @@ public class ImageHeadActivity extends AppCompatActivity {
         if (imagePath != null) {
             // 拿着imagePath上传了
             JSONObject jsonObject = new JSONObject();
-//            try {
-//                jsonObject.put("id","test");
-//                jsonObject.put("phoneNum","111111");
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
             mBitmap=bitmap;
             File file = new File(imagePath);
             //上传头像至服务器
             ImageUtils.upLoadImage(this, MyConstant.APPSERVER_URL + "/portraitUpload", file, jsonObject, new HttpResponseCallBack() {
                 @Override
                 public void response(String response) {
-//                    System.out.println(response);
-//                    Looper.prepare();
-//                    CustomProgress.dimiss();
-//                    //这里执行后台刷新个人信息了，否则个人信息还是老的
-//                    UserUtils.getSaveUserBasicInfo(ImageHeadActivity.ths,mHandler);
-//                    imageView.setImageBitmap(bitmap);
-//                    Toast.makeText(ImageHeadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
-//                    Looper.loop();
-                    mHandler.sendEmptyMessage(500);//上传成功
+                    ResultMsg resultMsg= JSON.parseObject(response,ResultMsg.class);
+                    Message msg=new Message();
+                    if (resultMsg.getErrcode()== ResultStatusCode.UPFILE_SCUESS.getErrcode()){
+                        mHandler.sendEmptyMessage(500);//上传成功
+                    }else {
+                       msg.what=400;
+                       msg.obj=resultMsg.getErrmsg();
+                       mHandler.sendMessage(msg);
+                    }
+
                 }
 
                 @Override
@@ -263,8 +287,7 @@ public class ImageHeadActivity extends AppCompatActivity {
      * 调用手机相机拍照
      */
     private void takePicture() {
-        //申请相机权限,已经包含了存储读写权限
-        if (PermissionUtil.getCameraPermissions(this, REQUEST_CODE_CAMERA)) {
+
 //            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //            File file = new File(Environment.getExternalStorageDirectory(), "image.jpg");
 //            //判断是否是AndroidN以及更高的版本
@@ -295,7 +318,7 @@ public class ImageHeadActivity extends AppCompatActivity {
             intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intentCamera, TAKE_PICTURE);
 
-        }
+
     }
 
     /**
@@ -343,10 +366,11 @@ public class ImageHeadActivity extends AppCompatActivity {
 
                     //startPhotoZoom(data.getData());
                     break;
-                case CROP_SMALL_PICTURE://4.让刚才选择裁剪得到的图片显示在界面上
-                    if (data != null) {
-                        setImageToView(data);
-                    }
+                case CROP_SMALL_PICTURE://4.剪裁完毕，让刚才选择裁剪得到的图片显示在界面上
+//                    if (data != null) {
+//                        setImageToView(data);
+//                    }
+                    setImageToView();
                     break;
             }
         }
@@ -365,6 +389,14 @@ public class ImageHeadActivity extends AppCompatActivity {
         PermissionUtil.onRequestPermissionsResult(requestCode, permissions, grantResults, new PermissionUtil.OnRequestPermissionsResultCallbacks() {
             @Override
             public void onPermissionsGranted(int requestCode, List<String> perms, boolean isAllGranted) {
+                if (isAllGranted){//全部通过
+                    if (requestCode == REQUEST_CODE_CAMERA){
+                        //继续打开操作对话
+                        if (PermissionUtil.getCameraPermissions(ImageHeadActivity.this,REQUEST_CODE_CAMERA)){
+                            showChoosePicDialog();
+                        }
+                    }
+                }
                 Log.e(TAG, "同意:" + perms.size() + "个权限,isAllGranted=" + isAllGranted);
                 for (String perm : perms) {
                     Log.e(TAG, "同意:" + perm);
@@ -380,14 +412,14 @@ public class ImageHeadActivity extends AppCompatActivity {
             }
         });
         switch (requestCode) {
-            case 100://相机
+            case 101://相机
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     takePicture();//重新去执行拍照
                 } else {
                     Toast.makeText(ImageHeadActivity.this, "需要相机权限", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case 200://存储权限
+            case 102://存储权限
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // takePicture();
                 } else {

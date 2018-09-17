@@ -24,6 +24,8 @@ import com.liu008.myapplication.utils.ApiHttpClient;
 import com.liu008.myapplication.utils.MyConstant;
 import com.liu008.myapplication.utils.ResultMsg;
 import com.liu008.myapplication.activity.PingDaoActivity;
+import com.liu008.myapplication.utils.SystemUtil;
+import com.liu008.myapplication.utils.UserUtils;
 
 
 import java.io.IOException;
@@ -97,30 +99,30 @@ public class BaseFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                final OkHttpClient client= ApiHttpClient.getInstance(getContext());
-                RequestBody body=new FormBody.Builder().add("role","Manager").build();
-                final Request request=new Request.Builder().url(MyConstant.APPSERVER_URL+"user/getusers")
-                        .post(body).build();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try  {
-                            Response response = client.newCall(request).execute();
-                            ResultMsg resultMsg = JSON.parseObject(response.body().string(), ResultMsg.class);
-                            //JSONObject jsonObject= JSON.parseObject(response.body().string());
-                            String s="code:"+resultMsg.getErrcode()+"  内容："+resultMsg.getErrmsg();
-                            //打印返回值代码
-                            System.out.println(s);
-                            if (resultMsg.getP2pdata()!=null ){
-
-                                //AccessToken accessToken = JSON.parseObject(resultMsg.getP2pdata().toString(), AccessToken.class);
-                                System.out.println(JSON.toJSONString(resultMsg.getP2pdata(),true));
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }}).start();
-
+//                final OkHttpClient client= ApiHttpClient.getInstance(getContext());
+//                RequestBody body=new FormBody.Builder().add("role","Manager").build();
+//                final Request request=new Request.Builder().url(MyConstant.APPSERVER_URL+"user/getusers")
+//                        .post(body).build();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try  {
+//                            Response response = client.newCall(request).execute();
+//                            ResultMsg resultMsg = JSON.parseObject(response.body().string(), ResultMsg.class);
+//                            //JSONObject jsonObject= JSON.parseObject(response.body().string());
+//                            String s="code:"+resultMsg.getErrcode()+"  内容："+resultMsg.getErrmsg();
+//                            //打印返回值代码
+//                            System.out.println(s);
+//                            if (resultMsg.getP2pdata()!=null ){
+//
+//                                //AccessToken accessToken = JSON.parseObject(resultMsg.getP2pdata().toString(), AccessToken.class);
+//                                System.out.println(JSON.toJSONString(resultMsg.getP2pdata(),true));
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }}).start();
+                SystemUtil.startPingDaoChat(getContext(),"123123","123");
             }
         });
         return view;
